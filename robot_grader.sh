@@ -2,14 +2,14 @@
 #
 # Grades students submissions.
 
-# Checking the number of arguments
+# Checking if the number of arguments is correct
 if [ "$#" -ne 1 ]; then
     echo "Usage: $0 <student_submission.c>"
     exit 1
 fi
 
 # Creating a temporary directory to store the student's submission
-tmp_dir=$(mktemp -d "${TMPDIR:-./}/robot_grader.XXXXXXXXXX")
+tmp_dir=$(mktemp -d -t tmp.robot_grader-XXXXX --tmpdir=/home/parmenin/Assignments/06)
 
 # Check if the temporary directory was created successfully
 if [ ! -d "$tmp_dir" ]; then
@@ -19,50 +19,50 @@ fi
 
 # Copy the student's submission to the temporary directory - to be revised
 cp "$1" "$tmp_dir"
-cp clist.h "$tmp_dir"
-cp clist.c "$tmp_dir"
 
 # Go inside the temporary directory, if error then exit
 cd "$tmp_dir" || exit 1
 
 # Compile the student's code
-gcc -Wall -Werror -fsanitize=address "$1" clist.c -o student_program
+gcc -Wall -Werror -fsanitize=address "$1" -o student_program
 
 # Check if the code compiled without errors
 if [ "$?" -ne 0 ]; then
+    echo "-------------------------------------------------"
     echo "Program crashed"
     echo
-    echo "Compilation: 0 out of 10"
-    echo "Correctness: 0 out of 40"
+    echo "Compilation:  0 out of 10"
+    echo "Correctness:  0 out of 40"
     echo "Memory leaks: 0 out of 20"
     echo
-    echo "Total: 0 out of 70"
+    echo "Total:        0 out of 70"
     exit 0
 fi
+
+# Print the message
+echo "Good job: Code compiled without errors"
 
 # Run the compiled program and capture the output
 output=$(./student_program)
 
-# Print the output
-echo "Good job: Code compiled without errors"
+# Print the output of the program
 echo "$output"
 
 # Check for memory leaks using -fsanitize=address
 leaks=$(ASAN_OPTIONS=detect_leaks=1 ./student_program 2>&1 >/dev/null | grep "SUMMARY: AddressSanitizer")
 if [ -n "$leaks" ]; then
-    leak_blocks=$(echo "$leaks" | awk -F ": " '{print $2}' | awk '{print $1}')
+    # From leaks: retrieve the number specified after "leaked in" text
+    leak_blocks=$(echo "$leaks" | grep -oP "leaked in \K[0-9]+")
     memory_leaks=$((20 - leak_blocks * 2))
 else
     memory_leaks=20
 fi
 
 # Count the number of passed tests
-# passed_tests=$(echo "$output" | grep -c "Passed")
-# Extract the number of passed tests from: “Passed x/10 test cases” using regex
-regex="Passed ([0-9]+)\/10 test cases"
-if [[ $output =~ $regex ]]; then
-    passed_tests=${BASH_REMATCH[1]}
-else
+# Extract the number of passed tests from: “Passed x/10 test cases”
+passed_tests=$(echo "$output" | grep -oP "Passed \K[0-9]+(?=/10 test cases)")
+
+if [ -z "$passed_tests" ]; then
     passed_tests=0
 fi
 
@@ -74,7 +74,13 @@ total_score=$((compilation_score + correctness_score + memory_leaks))
 # Print the scores
 echo "-------------------------------------------------"
 echo "Passed $passed_tests/10 test cases"
-echo "Leaked $leak_blocks memory blocks"
+
+if [ "$memory_leaks" -ne 20 ]; then
+    echo "Leaked $leak_blocks memory blocks"
+else
+    echo "Leaked 0 memory blocks"
+fi
+
 echo
 echo "Compilation:  $compilation_score out of 10"
 echo "Correctness:  $correctness_score out of 40"
@@ -82,5 +88,5 @@ echo "Memory leaks: $memory_leaks out of 20"
 echo
 echo "Total:        $total_score out of 70"
 
-# Clean up the temporary directory
+# Remove the temporary directory
 rm -rf "$tmp_dir"
