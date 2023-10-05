@@ -14,3 +14,7 @@ a04*
 /.vscode/
 clist_test
 *vscode*
+robot_grader.*
+!robot_grader.sh
+Makefile
+clist*
