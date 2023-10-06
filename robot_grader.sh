@@ -119,3 +119,54 @@ fi
 rm -rf "$tmp_dir"
 
 # Author: 	Niyomwungeri Parmenide ISHIMWE
+
+# READ ME FOR THE ROBOT GRADER
+# This is a robot grader for the linked lists assignment.
+# It is a bash script that takes a student's submission as an argument and grades it.
+# The script creates a temporary directory to store the student's submission.
+# It then compiles the student's code and runs it.
+# If the code compiles without errors, the script runs the compiled program and captures the output.
+# If the word "Passed" is appearing in the output, the script extracts the number of passed tests from: “Passed x/10 test cases”.
+# The script then calculates the scores and prints them to the user.
+# If the code does not compile, the script prints the compilation error to the user and exits.
+# If the code compiles but crashes, the script prints the crash message to the user and exits.
+# If the code compiles and runs without errors but does not pass any test, the script prints the correctness score to the user and exits.
+# If the code compiles and runs without errors and passes at least one test, the script prints the scores to the user.
+# The script also checks for memory leaks using -fsanitize=address.
+# If there are memory leaks, the script prints the number of leaked memory blocks to the user.
+# The script then calculates the memory leaks score and prints it to the user.
+# The script then calculates the total score and prints it to the user.
+# The script then removes the temporary directory.
+# The script is run as follows: ./robot_grader.sh <student_submission.c>
+# The script is tested on Ubuntu 20.04.2 LTS.
+# The script is tested with gcc (Ubuntu 9.3.0-17ubuntu1~20.04) 9.3.0.
+# The script is tested with GNU bash, version 5.0.17(1)-release (x86_64-pc-linux-gnu).
+# The script is tested with GNU grep 3.4.
+# The script is tested with GNU sed 4.7.
+# The script is tested with GNU awk 5.0.1.
+
+# The script is tested with the following student submissions:
+# 1. student_submission.c
+
+# The script is tested with the following student submissions:
+
+# __DESCRIPTION__
+# This is a robot grader for the linked lists assignment.
+
+# __USAGE__
+# The script is run as follows: ./robot_grader.sh <student_submission.c>
+
+# __TESTING__
+# The script is tested on Ubuntu 20.04.2 LTS.
+
+# __IMPORTANCE__
+# The script is important because it allows the students to test their code before submitting it.
+# The script is important because it allows the students to know their scores before submitting their code.
+# The script is important because it allows the students to know the number of memory blocks leaked by their code before submitting it.
+# The script is important because it allows the students to know the total score of their code before submitting it.
+
+# __AUTHOR__
+# The script is written by Niyomwungeri Parmenide ISHIMWE.
+
+# __DATE__
+# The script is written on 2021-03-28.
