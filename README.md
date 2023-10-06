@@ -29,7 +29,8 @@ The script handles the following scenarios:
 
 All output from the student's program, including both stdout and stderr, are passed through to the stdout of the Robot Grader.
 
-**Temporary Directory**
+**Temporary Directory:**
+
 The script creates a temporary directory to store the student's submission and any files generated during grading. It should not modify or create any files outside this temporary directory.
   
 __TESTING__
