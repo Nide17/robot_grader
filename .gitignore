@@ -18,3 +18,4 @@ robot_grader.*
 !robot_grader.sh
 Makefile
 clist*
+tmp.*
