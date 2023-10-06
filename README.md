@@ -19,7 +19,8 @@ The shell script is invoked with a single argument, which is the path to the stu
 ```
 ./robot_grader student_submission.c
 ```
-**Handling Different Scenarios**
+**Handling Different Scenarios:**
+
 The script handles the following scenarios:
 
 - If the student's code fails to compile, the script prints a compilation error message.
