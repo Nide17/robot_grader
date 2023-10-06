@@ -1,6 +1,6 @@
 /*
  * test_student.c
- *
+ * 
  * Simple code to simulate a student's submission, for use in
  * Assignment 6
  *
@@ -12,7 +12,7 @@
 
 #define ENV_TESTS_PASSED "A6_TESTS_PASSED"
 #define ENV_NUM_MEMLEAKS "A6_NUM_MEMLEAKS"
-#define ENV_FORCE_CRASH "A6_FORCE_CRASH"
+#define ENV_FORCE_CRASH  "A6_FORCE_CRASH"
 
 void usage(const char *argv0)
 {
@@ -28,8 +28,7 @@ void usage(const char *argv0)
 
 int main(int argc, char *argv[])
 {
-  if (argc != 1)
-  {
+  if (argc != 1) {
     usage(argv[0]);
     return 1;
   }
@@ -47,46 +46,41 @@ int main(int argc, char *argv[])
   if (getenv(ENV_FORCE_CRASH))
     force_crash = 1;
 
-  if (tests_passed < 0 || 10 < tests_passed)
-  {
+  if (tests_passed < 0 || 10 < tests_passed) {
     fprintf(stderr, "Illegal value for tests_passed: %d\n", tests_passed);
     usage(argv[0]);
     return 1;
   }
 
-  if (num_memleaks < 0 || 10 < num_memleaks)
-  {
+  if (num_memleaks < 0 || 10 < num_memleaks) {
     fprintf(stderr, "Illegal value for memleaks: %d\n", num_memleaks);
     usage(argv[0]);
     return 1;
   }
 
   /* Begin simulated output */
-
-  for (int i = 0; i < 10 - tests_passed; i++)
+  
+  for (int i=0; i < 10 - tests_passed; i++) 
     printf("FAIL test_cl_nth[118] CL_nth(list, 0): expected 'One', got 'Two'\n");
 
   printf("[0]: charlie\n");
   printf("[1]: bravo\n");
   printf("[2]: alpha\n");
 
-  if (force_crash)
-  {
+  if (force_crash) {
     const char *str = NULL;
     printf("%s\n", str);
   }
 
   printf("Passed %d/10 test cases\n", tests_passed);
   fflush(stdout);
-
-  if (num_memleaks > 0)
-  {
+  
+  if (num_memleaks > 0) {
 
     fprintf(stderr, "\n=================================================================\n");
     fprintf(stderr, "==11135==ERROR: LeakSanitizer: detected memory leaks\n\n");
 
-    for (int i = 0; i < num_memleaks; i++)
-    {
+    for (int i=0; i < num_memleaks; i++) {
       fprintf(stderr, "Direct leak of 16 byte(s) in 1 object(s) allocated from:\n");
       fprintf(stderr, "    #0 0x7f715a310887 in __interceptor_malloc ../../../../src/libsanitizer/asan/asan_malloc_linux.cpp:145\n");
       fprintf(stderr, "    #1 0x556b9fbec3d7 in CL_new /home/howdy/Teaching/CMU-ISSE/Assignments/05/clist.c:56\n");
@@ -96,7 +90,7 @@ int main(int argc, char *argv[])
     }
 
     fprintf(stderr, "SUMMARY: AddressSanitizer: %d byte(s) leaked in %d allocation(s).\n",
-            num_memleaks * 16, num_memleaks);
+        num_memleaks * 16, num_memleaks);
     return 1;
   }
 
